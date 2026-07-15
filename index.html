@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matahari Ward Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --arief: #1a7a4c;
+    --arief-soft: #e3f2e9;
+    --benny: #1d5fa8;
+    --benny-soft: #e4edf8;
+    --ripto: #b8342f;
+    --ripto-soft: #fae7e6;
+    --empty: #f5f2ea;
+    --empty-border: #d8d0bc;
+
+    --paper: #f7f4ec;
+    --paper-line: #e6e0d0;
+    --ink: #2a2620;
+    --ink-soft: #6b6455;
+    --card: #fffdf7;
+    --border: #ddd5bf;
+    --plaque: #2a2620;
+    --accent: #c17a3d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    background-image:
+      linear-gradient(var(--paper-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    background: var(--paper);
+    border-bottom: 2px solid var(--ink);
+    padding: 22px 24px 18px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    backdrop-filter: blur(2px);
+  }
+  .header-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .brand-block { display: flex; align-items: baseline; gap: 12px; }
+  .brand-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  header h1 {
+    margin: 2px 0 0 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--ink-soft);
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  .summary {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .summary-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--card);
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .summary-item.total {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+    font-weight: 600;
+  }
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .toolbar button {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 9px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.12s;
+  }
+  .toolbar button:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .toolbar button.danger:hover {
+    background: var(--ripto);
+    border-color: var(--ripto);
+  }
+
+  /* ---------- Denah (floor plan) ---------- */
+  .denah-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0;
+    margin-bottom: 28px;
+    box-shadow: 0 1px 3px rgba(42,38,32,0.06);
+    overflow: hidden;
+  }
+  .denah-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--border);
+  }
+  .denah-header h2 {
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .legend {
+    display: flex;
+    gap: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+  .legend span { display: flex; align-items: center; gap: 5px; }
+
+  .denah-body {
+    display: flex;
+    gap: 0;
+  }
+  .denah-scroll {
+    overflow-x: auto;
+    padding: 28px;
+    flex-shrink: 0;
+  }
+  .denah {
+    position: relative;
+    width: 640px;
+    height: 540px;
+  }
+
+  /* ---------- Active patients side panel ---------- */
+  .patient-panel {
+    flex: 1;
+    min-width: 260px;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    max-height: 540px;
+  }
+  .patient-panel-head {
+    padding: 16px 18px 12px;
+    border-bottom: 1px dashed var(--border);
+    flex-shrink: 0;
+  }
+  .patient-panel-head h3 {
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+  .patient-panel-head .count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+  .patient-search {
+    display: block;
+    width: 100%;
+    margin-top: 9px;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    background: var(--paper);
+  }
+  .patient-search:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .patient-panel-list {
+    overflow-y: auto;
+    padding: 8px 10px;
+    flex: 1;
+  }
+  .patient-panel-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 9px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .patient-panel-item:hover { background: var(--empty); }
+  .patient-panel-item .stripe {
+    width: 4px;
+    align-self: stretch;
+    border-radius: 2px;
+    flex-shrink: 0;
+    min-height: 34px;
+  }
+  .patient-panel-item .info { flex: 1; min-width: 0; }
+  .patient-panel-item .row1 {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .patient-panel-item .name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .patient-panel-item .room-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+    background: var(--empty);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+  .patient-panel-item .age {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+  }
+  .patient-panel-item .dx {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .patient-panel-item .baby-tag {
+    font-size: 11px;
+    margin-top: 2px;
+  }
+  .patient-panel-empty {
+    padding: 24px 12px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 12px;
+    font-style: italic;
+  }
+  .room {
+    position: absolute;
+    background: var(--empty);
+    border: 1.5px solid var(--empty-border);
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    padding: 4px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .room:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(42,38,32,0.18);
+    z-index: 5;
+  }
+  .room .room-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .room .room-info {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 3px;
+    line-height: 1.2;
+  }
+  .room.filled { border-width: 0; }
+  .room.filled .room-label { color: rgba(255,255,255,0.75); }
+  .room.filled .room-info { color: #fff; }
+  .room.filled.dpjp-arief { background: var(--arief); }
+  .room.filled.dpjp-benny { background: var(--benny); }
+  .room.filled.dpjp-ripto { background: var(--ripto); }
+  .room .baby-badge {
+    position: absolute;
+    top: 3px;
+    right: 4px;
+    font-size: 11px;
+    line-height: 1;
+  }
+  .room.recently-vacated {
+    border-style: dashed;
+    border-color: var(--accent);
+    background: repeating-linear-gradient(
+      135deg,
+      var(--empty),
+      var(--empty) 5px,
+      #f0e6d8 5px,
+      #f0e6d8 10px
+    );
+  }
+  .room .vacated-badge {
+    position: absolute;
+    bottom: 3px;
+    right: 4px;
+    font-size: 9px;
+    color: var(--accent);
+  }
+
+  .ruang-perawat {
+    position: absolute;
+    background: repeating-linear-gradient(
+      45deg,
+      #efe8d4,
+      #efe8d4 6px,
+      #e6ddc4 6px,
+      #e6ddc4 12px
+    );
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- Other sections ---------- */
+  .sections-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 8px 0 14px;
+  }
+  .sections-header h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .sections-header .note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+  .sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 14px;
+  }
+  .section-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(42,38,32,0.05);
+  }
+  .section-card h3 {
+    margin: 0 0 10px 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .section-card h3 .count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+  .patient-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.1s;
+  }
+  .patient-row:hover { background: var(--empty); }
+  .patient-row .name { font-weight: 500; flex: 1; }
+  .patient-row .age {
+    color: var(--ink-soft);
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .add-patient-btn {
+    margin-top: 6px;
+    width: 100%;
+    padding: 8px;
+    border: 1px dashed var(--border);
+    background: transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    transition: all 0.12s;
+  }
+  .add-patient-btn:hover {
+    background: var(--empty);
+    color: var(--ink);
+    border-color: var(--ink-soft);
+  }
+  .empty-note {
+    color: var(--ink-soft);
+    font-size: 12px;
+    font-style: italic;
+    padding: 6px 4px;
+  }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(42,38,32,0.55);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--card);
+    border-radius: 10px;
+    max-width: 460px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 0;
+    border: 1px solid var(--border);
+  }
+  .modal-head {
+    padding: 18px 22px;
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-head h3 {
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .modal-head .close-btn {
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-size: 22px;
+    line-height: 1;
+    background: none;
+    border: none;
+    padding: 0 2px;
+  }
+  .modal-body { padding: 20px 22px; }
+  .field { margin-bottom: 14px; }
+  .field label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+  .field label .hint-inline {
+    text-transform: none;
+    font-weight: 400;
+    color: var(--ink-soft);
+    letter-spacing: 0;
+    font-size: 10px;
+  }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    background: #fff;
+    color: var(--ink);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .field textarea { min-height: 60px; resize: vertical; }
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .btn {
+    padding: 10px 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    transition: opacity 0.12s;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn-primary { background: var(--ink); color: var(--paper); flex: 1; }
+  .btn-danger { background: var(--ripto-soft); color: var(--ripto); }
+  .btn-secondary { background: var(--empty); color: var(--ink); }
+
+  .hday-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    background: var(--empty);
+    color: var(--ink);
+    padding: 6px 11px;
+    border-radius: 5px;
+    margin: -6px 0 14px;
+  }
+  .baby-section {
+    margin: 4px 0 16px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 12px;
+    background: #fdf6f6;
+  }
+  .baby-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .baby-toggle-label input { width: auto; }
+  .baby-fields { margin-top: 12px; }
+  .field-row {
+    display: flex;
+    gap: 10px;
+  }
+  .field-row .field { flex: 1; }
+
+  .history-list {
+    margin-top: 6px;
+    max-height: 160px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 10px;
+    background: var(--paper);
+  }
+  .history-item {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    padding: 5px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .history-item:last-child { border-bottom: none; }
+  .history-item b { color: var(--ink); }
+
+  #toast {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-family: 'IBM Plex Mono', monospace;
+    display: none;
+    z-index: 200;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  }
+
+  @media (max-width: 900px) {
+    .denah-body { flex-direction: column; }
+    .patient-panel {
+      border-left: none;
+      border-top: 1px solid var(--border);
+      max-height: 320px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 16px 16px 14px; }
+    header h1 { font-size: 21px; }
+    .container { padding: 20px 12px 40px; }
+    .denah-scroll { padding: 16px 10px; }
+  }
+
+  /* ---------- Print ---------- */
+  .print-only { display: none; }
+  @media print {
+    body { background: #fff; }
+    header, .toolbar, .denah-wrap, .modal-overlay, #toast, .sections-header .note {
+      display: none !important;
+    }
+    .print-only { display: block; }
+    .container { padding: 0; max-width: 100%; }
+    .print-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .print-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--ink-soft);
+      margin-bottom: 16px;
+    }
+    .print-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-bottom: 20px;
+    }
+    .print-table th, .print-table td {
+      border: 1px solid #999;
+      padding: 5px 7px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .print-table th {
+      background: #eee;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+    .print-section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      margin: 14px 0 6px;
+    }
+    .sections { display: block !important; }
+    .section-card { break-inside: avoid; border: none; box-shadow: none; padding: 0; margin-bottom: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand-block-wrap">
+      <div class="brand-eyebrow">Stase Obgyn &middot; RSUD Karsa Husada Batu</div>
+      <h1>Matahari Ward Board</h1>
+      <div class="sub" id="lastUpdated">Belum ada data</div>
+    </div>
+    <div class="summary" id="summaryBar"></div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="toolbar">
+    <button onclick="exportData()">↓ Export JSON</button>
+    <button onclick="document.getElementById('importFile').click()">↑ Import JSON</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    <button class="danger" onclick="resetAllData()">✕ Reset Semua Data</button>
+    <button onclick="copyRingkasan()">📋 Copy Ringkasan</button>
+    <button onclick="window.print()">🖨 Print</button>
+  </div>
+
+  <div class="denah-wrap">
+    <div class="denah-header">
+      <h2>Denah Matahari</h2>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--arief)"></span>Arief</span>
+        <span><span class="dot" style="background:var(--benny)"></span>Benny (K)</span>
+        <span><span class="dot" style="background:var(--ripto)"></span>Ripto</span>
+        <span><span class="dot" style="background:var(--empty);border:1px solid var(--empty-border)"></span>Kosong</span>
+      </div>
+    </div>
+    <div class="denah-body">
+      <div class="denah-scroll">
+        <div class="denah" id="denah"></div>
+      </div>
+      <div class="patient-panel">
+        <div class="patient-panel-head">
+          <h3>Pasien Aktif</h3>
+          <span class="count" id="activeCount">0 pasien</span>
+          <input type="text" id="patientSearch" class="patient-search" placeholder="Cari nama / kamar / DPJP..." oninput="renderActivePatientPanel()">
+        </div>
+        <div class="patient-panel-list" id="activePatientList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sections-header">
+    <h2>Bangsal Lain</h2>
+    <span class="note">— tanpa denah, list pasien</span>
+  </div>
+  <div class="sections" id="otherSections"></div>
+
+  <div class="print-only" id="printView"></div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle">Kamar</h3>
+      <button class="close-btn" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>DPJP</label>
+        <select id="f_dpjp">
+          <option value="">— Kosong —</option>
+          <option value="arief">dr. Arief, Sp.OG</option>
+          <option value="benny">dr. Benny, Sp.OG (K)</option>
+          <option value="ripto">dr. Ripto, Sp.OG</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Nama Pasien</label>
+        <input type="text" id="f_nama" placeholder="Ny. ...">
+      </div>
+      <div class="field">
+        <label>Umur</label>
+        <input type="text" id="f_umur" placeholder="25 th">
+      </div>
+      <div class="field">
+        <label>Tanggal Masuk <span class="hint-inline">(buat hitung H- otomatis)</span></label>
+        <input type="date" id="f_tglmasuk" onchange="renderHdayBadge(this.value)">
+      </div>
+      <div class="field">
+        <label>Diagnosis</label>
+        <textarea id="f_dx" placeholder="G2P1001AB000 UK 28-29 MGG + PEB..."></textarea>
+      </div>
+      <div class="hday-badge" id="hdayBadge" style="display:none;"></div>
+      <div class="field">
+        <label>Catatan</label>
+        <textarea id="f_note" placeholder="Catatan tambahan (opsional)"></textarea>
+      </div>
+
+      <div class="baby-section">
+        <label class="baby-toggle-label">
+          <input type="checkbox" id="f_baby_toggle" onchange="toggleBabyFields()">
+          <span>💕 Bayi sudah lahir</span>
+        </label>
+        <div id="babyFields" class="baby-fields" style="display:none;">
+          <div class="field">
+            <label>Nama Bayi</label>
+            <input type="text" id="f_baby_nama" placeholder="By. Ny. ...">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Jenis Kelamin</label>
+              <select id="f_baby_jk">
+                <option value="">—</option>
+                <option value="L">Laki-laki</option>
+                <option value="P">Perempuan</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Tgl/Jam Lahir</label>
+              <input type="text" id="f_baby_waktu" placeholder="15/07/2026 05.00">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Berat Badan</label>
+              <input type="text" id="f_baby_bb" placeholder="3200 gram">
+            </div>
+            <div class="field">
+              <label>Panjang Badan</label>
+              <input type="text" id="f_baby_pb" placeholder="49 cm">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>APGAR Score</label>
+              <input type="text" id="f_baby_apgar" placeholder="8/9">
+            </div>
+            <div class="field">
+              <label>Cara Lahir</label>
+              <input type="text" id="f_baby_cara" placeholder="Spontan / SC / Vakum">
+            </div>
+          </div>
+          <div class="field">
+            <label>Kondisi / Catatan Bayi</label>
+            <textarea id="f_baby_note" placeholder="Sehat, rawat gabung / observasi NICU, dll"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="saveRoom()">Simpan</button>
+        <button class="btn btn-danger" onclick="clearRoom()">Kosongkan</button>
+      </div>
+      <div class="field" style="margin-top:16px;">
+        <label>History</label>
+        <div class="history-list" id="historyList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const DPJP = {
+  arief: { name: 'dr. Arief, Sp.OG', cls: 'dpjp-arief' },
+  benny: { name: 'dr. Benny, Sp.OG (K)', cls: 'dpjp-benny' },
+  ripto: { name: 'dr. Ripto, Sp.OG', cls: 'dpjp-ripto' }
+};
+const DPJP_COLOR_VAR = { arief: '--arief', benny: '--benny', ripto: '--ripto' };
+
+const ROOM_LAYOUT = {
+  '3B1': { x: 278, y: 16,  w: 62, h: 66 },
+  '3B2': { x: 344, y: 16,  w: 62, h: 66 },
+  '3A3': { x: 96,  y: 66,  w: 56, h: 60 },
+  '3A2': { x: 154, y: 66,  w: 56, h: 60 },
+  '3A1': { x: 212, y: 66,  w: 56, h: 60 },
+  '3C1': { x: 278, y: 128, w: 62, h: 60 },
+  '3C2': { x: 344, y: 128, w: 62, h: 60 },
+  '2A2': { x: 96,  y: 128, w: 84, h: 64 },
+  '2A1': { x: 180, y: 128, w: 88, h: 64 },
+  '1B2': { x: 96,  y: 198, w: 84, h: 64 },
+  '1B1': { x: 180, y: 198, w: 88, h: 64 },
+  '1A2': { x: 96,  y: 268, w: 84, h: 64 },
+  '1A1': { x: 180, y: 268, w: 88, h: 64 },
+  'VK ISO': { x: 96,  y: 338, w: 84, h: 64 },
+  'VK4': { x: 96,  y: 410, w: 84, h: 76 },
+  'VK3': { x: 180, y: 410, w: 84, h: 76 },
+  'VK2': { x: 264, y: 410, w: 84, h: 76 },
+  'VK1': { x: 348, y: 410, w: 84, h: 76 },
+};
+const RUANG_PERAWAT = { x: 278, y: 198, w: 134, h: 204 };
+
+const ALL_ROOM_IDS = Object.keys(ROOM_LAYOUT);
+const OTHER_SECTIONS = [
+  'HCU', 'VIP', 'IGD', 'Amarilis', 'CVCU', 'Edelweis', 'Orchid', 'ICU', 'Krisan', 'Mawar', 'Teratai'
+];
+
+const STORAGE_KEY = 'wardControlData_v1';
+let currentEditKey = null;
+
+function loadData() {
+  let raw = localStorage.getItem(STORAGE_KEY);
+  let data;
+  try { data = raw ? JSON.parse(raw) : null; } catch(e) { data = null; }
+  if (!data) data = { rooms: {}, otherPatients: {}, lastUpdated: null };
+  if (!data.rooms) data.rooms = {};
+  if (!data.otherPatients) data.otherPatients = {};
+  // migrate old VK5 key to VK ISO
+  if (data.rooms['VK5'] && !data.rooms['VK ISO']) {
+    data.rooms['VK ISO'] = data.rooms['VK5'];
+    delete data.rooms['VK5'];
+  }
+  OTHER_SECTIONS.forEach(s => { if (!data.otherPatients[s]) data.otherPatients[s] = []; });
+  return data;
+}
+
+function saveData() {
+  DATA.lastUpdated = new Date().toISOString();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+  renderLastUpdated();
+}
+
+let DATA = loadData();
+
+function renderLastUpdated() {
+  const el = document.getElementById('lastUpdated');
+  if (DATA.lastUpdated) {
+    const d = new Date(DATA.lastUpdated);
+    el.textContent = 'Update terakhir · ' + d.toLocaleString('id-ID');
+  } else {
+    el.textContent = 'Belum ada data';
+  }
+}
+
+function initials(name) {
+  if (!name) return '';
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,3);
+}
+
+function renderDenah() {
+  const denah = document.getElementById('denah');
+  denah.innerHTML = '';
+
+  const rp = document.createElement('div');
+  rp.className = 'ruang-perawat';
+  rp.style.left = RUANG_PERAWAT.x + 'px';
+  rp.style.top = RUANG_PERAWAT.y + 'px';
+  rp.style.width = RUANG_PERAWAT.w + 'px';
+  rp.style.height = RUANG_PERAWAT.h + 'px';
+  rp.textContent = 'Ruang Perawat';
+  denah.appendChild(rp);
+
+  ALL_ROOM_IDS.forEach(id => {
+    const pos = ROOM_LAYOUT[id];
+    const room = DATA.rooms[id];
+    const div = document.createElement('div');
+    div.className = 'room';
+    div.style.left = pos.x + 'px';
+    div.style.top = pos.y + 'px';
+    div.style.width = pos.w + 'px';
+    div.style.height = pos.h + 'px';
+    div.onclick = () => openRoomModal(id);
+
+    const label = document.createElement('div');
+    label.className = 'room-label';
+    label.textContent = id;
+    div.appendChild(label);
+
+    if (room && room.dpjp) {
+      div.classList.add('filled', DPJP[room.dpjp].cls);
+      const info = document.createElement('div');
+      info.className = 'room-info';
+      info.textContent = (room.nama ? initials(room.nama) : '') + (room.umur ? ' / ' + room.umur : '');
+      div.appendChild(info);
+
+      if (room.baby && room.baby.exists) {
+        const badge = document.createElement('div');
+        badge.className = 'baby-badge';
+        badge.textContent = '💕';
+        div.appendChild(badge);
+      }
+    } else if (room && room.history && room.history.length > 0) {
+      const lastEntry = room.history[room.history.length - 1];
+      const hoursSince = (Date.now() - new Date(lastEntry.timestamp).getTime()) / 3600000;
+      if (hoursSince <= 24) {
+        div.classList.add('recently-vacated');
+        const badge = document.createElement('div');
+        badge.className = 'vacated-badge';
+        badge.textContent = 'baru kosong';
+        div.appendChild(badge);
+      }
+    }
+
+    denah.appendChild(div);
+  });
+}
+
+function renderActivePatientPanel() {
+  const listEl = document.getElementById('activePatientList');
+  const countEl = document.getElementById('activeCount');
+  const query = (document.getElementById('patientSearch').value || '').toLowerCase().trim();
+  listEl.innerHTML = '';
+
+  let active = [];
+  ALL_ROOM_IDS.forEach(id => {
+    const r = DATA.rooms[id];
+    if (r && r.dpjp) active.push({ room: id, ...r });
+  });
+
+  if (query) {
+    active = active.filter(p => {
+      const dpjpName = (DPJP[p.dpjp] && DPJP[p.dpjp].name || '').toLowerCase();
+      return (p.nama || '').toLowerCase().includes(query)
+        || (p.room || '').toLowerCase().includes(query)
+        || dpjpName.includes(query)
+        || (p.dx || '').toLowerCase().includes(query);
+    });
+  }
+
+  countEl.textContent = active.length + ' pasien';
+
+  if (active.length === 0) {
+    listEl.innerHTML = query
+      ? '<div class="patient-panel-empty">Tidak ada pasien yang cocok dengan pencarian</div>'
+      : '<div class="patient-panel-empty">Belum ada pasien aktif di Matahari</div>';
+    return;
+  }
+
+  active.forEach(p => {
+    const item = document.createElement('div');
+    item.className = 'patient-panel-item';
+    item.onclick = () => openRoomModal(p.room);
+
+    const stripe = document.createElement('div');
+    stripe.className = 'stripe';
+    stripe.style.background = `var(${DPJP_COLOR_VAR[p.dpjp]})`;
+    item.appendChild(stripe);
+
+    const info = document.createElement('div');
+    info.className = 'info';
+
+    const row1 = document.createElement('div');
+    row1.className = 'row1';
+    const hday = calcHDay(p.tglMasuk);
+    row1.innerHTML = `<span class="name">${p.nama || '(tanpa nama)'}</span><span class="room-tag">${p.room}</span>${p.umur ? `<span class="age">${p.umur}</span>` : ''}${hday !== null ? `<span class="age">H${hday}</span>` : ''}`;
+    info.appendChild(row1);
+
+    if (p.dx) {
+      const dx = document.createElement('div');
+      dx.className = 'dx';
+      dx.textContent = p.dx;
+      info.appendChild(dx);
+    }
+
+    if (p.baby && p.baby.exists) {
+      const babyTag = document.createElement('div');
+      babyTag.className = 'baby-tag';
+      babyTag.textContent = '💕 ' + (p.baby.nama || 'Bayi lahir');
+      info.appendChild(babyTag);
+    }
+
+    item.appendChild(info);
+    listEl.appendChild(item);
+  });
+}
+
+function renderOtherSections() {
+  const wrap = document.getElementById('otherSections');
+  wrap.innerHTML = '';
+  OTHER_SECTIONS.forEach(section => {
+    const patients = DATA.otherPatients[section] || [];
+    const card = document.createElement('div');
+    card.className = 'section-card';
+
+    const h3 = document.createElement('h3');
+    h3.innerHTML = `<span>${section}</span><span class="count">${patients.length} psn</span>`;
+    card.appendChild(h3);
+
+    if (patients.length === 0) {
+      const p = document.createElement('div');
+      p.className = 'empty-note';
+      p.textContent = 'Belum ada pasien';
+      card.appendChild(p);
+    } else {
+      patients.forEach((p, idx) => {
+        const row = document.createElement('div');
+        row.className = 'patient-row';
+        row.onclick = () => openSectionPatientModal(section, idx);
+        const dot = document.createElement('span');
+        dot.className = 'dot';
+        dot.style.background = p.dpjp ? `var(${DPJP_COLOR_VAR[p.dpjp]})` : 'var(--empty-border)';
+        row.appendChild(dot);
+        const name = document.createElement('span');
+        name.className = 'name';
+        name.textContent = p.nama || '(tanpa nama)';
+        row.appendChild(name);
+        const age = document.createElement('span');
+        age.className = 'age';
+        age.textContent = p.umur || '';
+        row.appendChild(age);
+        card.appendChild(row);
+      });
+    }
+
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-patient-btn';
+    addBtn.textContent = '+ Tambah pasien';
+    addBtn.onclick = () => openSectionPatientModal(section, null);
+    card.appendChild(addBtn);
+
+    wrap.appendChild(card);
+  });
+}
+
+function renderSummary() {
+  const bar = document.getElementById('summaryBar');
+  let counts = { arief: 0, benny: 0, ripto: 0 };
+  let total = 0;
+
+  ALL_ROOM_IDS.forEach(id => {
+    const r = DATA.rooms[id];
+    if (r && r.dpjp) { counts[r.dpjp]++; total++; }
+  });
+  OTHER_SECTIONS.forEach(sec => {
+    (DATA.otherPatients[sec] || []).forEach(p => {
+      if (p.dpjp) { counts[p.dpjp]++; total++; }
+    });
+  });
+
+  bar.innerHTML = `
+    <div class="summary-item total">${total} pasien</div>
+    <div class="summary-item"><span class="dot" style="background:var(--arief)"></span>${counts.arief}</div>
+    <div class="summary-item"><span class="dot" style="background:var(--benny)"></span>${counts.benny}</div>
+    <div class="summary-item"><span class="dot" style="background:var(--ripto)"></span>${counts.ripto}</div>
+  `;
+}
+
+function renderPrintView() {
+  const el = document.getElementById('printView');
+  const now = new Date();
+  let html = `<div class="print-title">Matahari Ward Board — Laporan Pasien</div>`;
+  html += `<div class="print-sub">Dicetak: ${now.toLocaleString('id-ID')}</div>`;
+
+  html += `<table class="print-table"><thead><tr>
+    <th>Kamar</th><th>Nama / Umur</th><th>H-</th><th>Diagnosis</th><th>DPJP</th><th>Bayi</th>
+  </tr></thead><tbody>`;
+
+  ALL_ROOM_IDS.forEach(id => {
+    const r = DATA.rooms[id];
+    if (r && r.dpjp) {
+      const hday = calcHDay(r.tglMasuk);
+      const babyStr = (r.baby && r.baby.exists) ? (r.baby.nama || 'Ya') : '-';
+      html += `<tr>
+        <td>${id}</td>
+        <td>${r.nama || '-'} / ${r.umur || '-'}</td>
+        <td>${hday !== null ? 'H'+hday : '-'}</td>
+        <td>${r.dx || '-'}</td>
+        <td>${DPJP[r.dpjp] ? DPJP[r.dpjp].name : '-'}</td>
+        <td>${babyStr}</td>
+      </tr>`;
+    }
+  });
+  html += `</tbody></table>`;
+
+  OTHER_SECTIONS.forEach(sec => {
+    const list = DATA.otherPatients[sec] || [];
+    if (list.length === 0) return;
+    html += `<div class="print-section-title">${sec} (${list.length} pasien)</div>`;
+    html += `<table class="print-table"><thead><tr>
+      <th>Nama / Umur</th><th>H-</th><th>Diagnosis</th><th>DPJP</th>
+    </tr></thead><tbody>`;
+    list.forEach(p => {
+      const hday = calcHDay(p.tglMasuk);
+      html += `<tr>
+        <td>${p.nama || '-'} / ${p.umur || '-'}</td>
+        <td>${hday !== null ? 'H'+hday : '-'}</td>
+        <td>${p.dx || '-'}</td>
+        <td>${DPJP[p.dpjp] ? DPJP[p.dpjp].name : '-'}</td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function renderAll() {
+  renderDenah();
+  renderActivePatientPanel();
+  renderOtherSections();
+  renderSummary();
+  renderLastUpdated();
+  renderPrintView();
+}
+
+function openRoomModal(roomId) {
+  currentEditKey = { type: 'room', id: roomId };
+  const room = DATA.rooms[roomId] || {};
+  document.getElementById('modalTitle').textContent = 'Kamar ' + roomId;
+  document.getElementById('f_dpjp').value = room.dpjp || '';
+  document.getElementById('f_nama').value = room.nama || '';
+  document.getElementById('f_umur').value = room.umur || '';
+  document.getElementById('f_tglmasuk').value = room.tglMasuk || '';
+  document.getElementById('f_dx').value = room.dx || '';
+  document.getElementById('f_note').value = room.note || '';
+  populateBabyFields(room.baby);
+  renderHdayBadge(room.tglMasuk);
+  renderHistory(room.history || []);
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function calcHDay(tglMasuk) {
+  if (!tglMasuk) return null;
+  const start = new Date(tglMasuk + 'T00:00:00');
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const diffMs = today - start;
+  const diffDays = Math.round(diffMs / 86400000);
+  if (diffDays < 0) return null;
+  return diffDays + 1; // H1 = admission day itself
+}
+
+function renderHdayBadge(tglMasuk) {
+  const badge = document.getElementById('hdayBadge');
+  const h = calcHDay(tglMasuk);
+  if (h === null) {
+    badge.style.display = 'none';
+    return;
+  }
+  badge.style.display = 'inline-flex';
+  badge.textContent = `🗓 H${h} sejak masuk`;
+}
+
+function populateBabyFields(baby) {
+  const has = !!(baby && baby.exists);
+  document.getElementById('f_baby_toggle').checked = has;
+  document.getElementById('babyFields').style.display = has ? 'block' : 'none';
+  document.getElementById('f_baby_nama').value = (baby && baby.nama) || '';
+  document.getElementById('f_baby_jk').value = (baby && baby.jk) || '';
+  document.getElementById('f_baby_waktu').value = (baby && baby.waktu) || '';
+  document.getElementById('f_baby_bb').value = (baby && baby.bb) || '';
+  document.getElementById('f_baby_pb').value = (baby && baby.pb) || '';
+  document.getElementById('f_baby_apgar').value = (baby && baby.apgar) || '';
+  document.getElementById('f_baby_cara').value = (baby && baby.cara) || '';
+  document.getElementById('f_baby_note').value = (baby && baby.note) || '';
+}
+
+function readBabyFields() {
+  const exists = document.getElementById('f_baby_toggle').checked;
+  return {
+    exists,
+    nama: document.getElementById('f_baby_nama').value.trim(),
+    jk: document.getElementById('f_baby_jk').value,
+    waktu: document.getElementById('f_baby_waktu').value.trim(),
+    bb: document.getElementById('f_baby_bb').value.trim(),
+    pb: document.getElementById('f_baby_pb').value.trim(),
+    apgar: document.getElementById('f_baby_apgar').value.trim(),
+    cara: document.getElementById('f_baby_cara').value.trim(),
+    note: document.getElementById('f_baby_note').value.trim(),
+  };
+}
+
+function openSectionPatientModal(section, idx) {
+  const list = DATA.otherPatients[section] || [];
+  const patient = idx !== null ? list[idx] : {};
+  currentEditKey = { type: 'section', section, idx };
+  document.getElementById('modalTitle').textContent = section + (idx !== null ? ' · Edit Pasien' : ' · Pasien Baru');
+  document.getElementById('f_dpjp').value = patient.dpjp || '';
+  document.getElementById('f_nama').value = patient.nama || '';
+  document.getElementById('f_umur').value = patient.umur || '';
+  document.getElementById('f_tglmasuk').value = patient.tglMasuk || '';
+  document.getElementById('f_dx').value = patient.dx || '';
+  document.getElementById('f_note').value = patient.note || '';
+  populateBabyFields(patient.baby);
+  renderHdayBadge(patient.tglMasuk);
+  renderHistory(patient.history || []);
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function renderHistory(history) {
+  const list = document.getElementById('historyList');
+  if (!history || history.length === 0) {
+    list.innerHTML = '<div class="empty-note">Belum ada history</div>';
+    return;
+  }
+  list.innerHTML = history.slice().reverse().map(h => {
+    const d = new Date(h.timestamp);
+    return `<div class="history-item"><b>${d.toLocaleString('id-ID')}</b> — ${h.action}${h.detail ? ': ' + h.detail : ''}</div>`;
+  }).join('');
+}
+
+function toggleBabyFields() {
+  const checked = document.getElementById('f_baby_toggle').checked;
+  document.getElementById('babyFields').style.display = checked ? 'block' : 'none';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  currentEditKey = null;
+}
+
+function addHistoryEntry(historyArr, action, detail) {
+  historyArr.push({ timestamp: new Date().toISOString(), action, detail });
+  return historyArr;
+}
+
+function saveRoom() {
+  const dpjp = document.getElementById('f_dpjp').value;
+  const nama = document.getElementById('f_nama').value.trim();
+  const umur = document.getElementById('f_umur').value.trim();
+  let tglMasuk = document.getElementById('f_tglmasuk').value;
+  const dx = document.getElementById('f_dx').value.trim();
+  const note = document.getElementById('f_note').value.trim();
+  const baby = readBabyFields();
+
+  if (!currentEditKey) return;
+
+  if (currentEditKey.type === 'room') {
+    const roomId = currentEditKey.id;
+    const existing = DATA.rooms[roomId] || { history: [] };
+    const wasEmpty = !existing.dpjp;
+    const nowEmpty = !dpjp;
+    let history = existing.history || [];
+
+    if (wasEmpty && !nowEmpty) {
+      if (!tglMasuk) tglMasuk = new Date().toISOString().slice(0,10);
+      addHistoryEntry(history, 'Pasien masuk', `${nama || '-'} (${DPJP[dpjp] ? DPJP[dpjp].name : '-'})`);
+    } else if (!wasEmpty && dpjp) {
+      addHistoryEntry(history, 'Data diperbarui', `${nama || '-'}`);
+    }
+    if (baby.exists && (!existing.baby || !existing.baby.exists)) {
+      addHistoryEntry(history, 'Bayi lahir', `${baby.nama || '-'}`);
+    }
+
+    DATA.rooms[roomId] = { dpjp, nama, umur, tglMasuk, dx, note, baby, history };
+  } else if (currentEditKey.type === 'section') {
+    const { section, idx } = currentEditKey;
+    const list = DATA.otherPatients[section] || [];
+    if (idx !== null) {
+      const existing = list[idx];
+      let history = existing.history || [];
+      addHistoryEntry(history, 'Data diperbarui', `${nama || '-'}`);
+      if (baby.exists && (!existing.baby || !existing.baby.exists)) {
+        addHistoryEntry(history, 'Bayi lahir', `${baby.nama || '-'}`);
+      }
+      list[idx] = { dpjp, nama, umur, tglMasuk, dx, note, baby, history };
+    } else {
+      if (!tglMasuk) tglMasuk = new Date().toISOString().slice(0,10);
+      let history = [];
+      addHistoryEntry(history, 'Pasien ditambahkan', `${nama || '-'}`);
+      list.push({ dpjp, nama, umur, tglMasuk, dx, note, baby, history });
+    }
+    DATA.otherPatients[section] = list;
+  }
+
+  saveData();
+  renderAll();
+  closeModal();
+  showToast('Tersimpan');
+}
+
+function clearRoom() {
+  if (!currentEditKey) return;
+
+  if (currentEditKey.type === 'room') {
+    const roomId = currentEditKey.id;
+    const existing = DATA.rooms[roomId];
+    if (existing && existing.dpjp) {
+      let history = existing.history || [];
+      addHistoryEntry(history, 'Pasien keluar / kamar dikosongkan', existing.nama || '-');
+      DATA.rooms[roomId] = { dpjp: '', nama: '', umur: '', tglMasuk: '', dx: '', note: '', baby: null, history };
+    }
+  } else if (currentEditKey.type === 'section') {
+    const { section, idx } = currentEditKey;
+    if (idx !== null) {
+      const list = DATA.otherPatients[section] || [];
+      list.splice(idx, 1);
+      DATA.otherPatients[section] = list;
+    }
+  }
+
+  saveData();
+  renderAll();
+  closeModal();
+  showToast('Kamar dikosongkan / pasien dihapus');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 2000);
+}
+
+function copyRingkasan() {
+  const lines = [];
+  const now = new Date();
+  lines.push(`Ringkasan Matahari · ${now.toLocaleString('id-ID')}`);
+  lines.push('');
+
+  let total = 0;
+  ALL_ROOM_IDS.forEach(id => {
+    const r = DATA.rooms[id];
+    if (r && r.dpjp) {
+      total++;
+      const hday = calcHDay(r.tglMasuk);
+      const hstr = hday !== null ? ` (H${hday})` : '';
+      const babyStr = (r.baby && r.baby.exists) ? ' 💕 bayi lahir' : '';
+      lines.push(`${id} - ${r.nama || '-'}/${r.umur || '-'}${hstr}/${r.dx || '-'}/${DPJP[r.dpjp] ? DPJP[r.dpjp].name : '-'}${babyStr}`);
+    }
+  });
+
+  lines.push('');
+  lines.push(`Total pasien Matahari: ${total}`);
+
+  const otherLines = [];
+  OTHER_SECTIONS.forEach(sec => {
+    const list = DATA.otherPatients[sec] || [];
+    if (list.length > 0) {
+      otherLines.push('');
+      otherLines.push(`*${sec} (${list.length} pasien)*`);
+      list.forEach((p, i) => {
+        const hday = calcHDay(p.tglMasuk);
+        const hstr = hday !== null ? ` (H${hday})` : '';
+        otherLines.push(`${i+1}. ${p.nama || '-'}/${p.umur || '-'}${hstr}/${p.dx || '-'}/${DPJP[p.dpjp] ? DPJP[p.dpjp].name : '-'}`);
+      });
+    }
+  });
+
+  const fullText = lines.concat(otherLines).join('\n');
+
+  navigator.clipboard.writeText(fullText).then(() => {
+    showToast('Ringkasan disalin ke clipboard');
+  }).catch(() => {
+    // fallback for older/restricted contexts
+    const ta = document.createElement('textarea');
+    ta.value = fullText;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); showToast('Ringkasan disalin ke clipboard'); }
+    catch(e) { alert('Gagal menyalin otomatis. Salin manual dari sini:\n\n' + fullText); }
+    document.body.removeChild(ta);
+  });
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(DATA, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.download = `ward-data-${dateStr}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Data diexport');
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!imported.rooms) throw new Error('Format tidak valid');
+      DATA = imported;
+      if (!DATA.otherPatients) DATA.otherPatients = {};
+      OTHER_SECTIONS.forEach(s => { if (!DATA.otherPatients[s]) DATA.otherPatients[s] = []; });
+      saveData();
+      renderAll();
+      showToast('Data berhasil diimport');
+    } catch (err) {
+      alert('Gagal import: file JSON tidak valid.');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function resetAllData() {
+  if (confirm('Yakin mau hapus SEMUA data? Aksi ini tidak bisa dibatalkan. Pastikan sudah export dulu kalau perlu backup.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    DATA = loadData();
+    saveData();
+    renderAll();
+    showToast('Semua data direset');
+  }
+}
+
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modalOverlay') closeModal();
+});
+
+renderAll();
+</script>
+
+</body>
+</html>
