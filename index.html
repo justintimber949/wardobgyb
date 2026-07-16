@@ -200,7 +200,8 @@
     padding: 0;
     margin-bottom: 28px;
     box-shadow: 0 1px 3px rgba(42,38,32,0.06);
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
   .denah-header {
     display: flex;
@@ -227,26 +228,29 @@
   .denah-body {
     display: flex;
     gap: 0;
+    align-items: stretch;
   }
   .denah-scroll {
     overflow-x: auto;
     padding: 28px;
     flex-shrink: 0;
+    max-width: 100%;
   }
   .denah {
     position: relative;
-    width: 640px;
-    height: 540px;
+    width: 660px;
+    height: 720px;
   }
 
   /* ---------- Active patients side panel ---------- */
   .patient-panel {
-    flex: 1;
-    min-width: 260px;
+    flex: 1 1 300px;
+    min-width: 280px;
+    max-width: 420px;
     border-left: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    max-height: 540px;
+    height: 596px;
   }
   .patient-panel-head {
     padding: 16px 18px 12px;
@@ -278,6 +282,31 @@
   .patient-search:focus {
     outline: none;
     border-color: var(--accent);
+  }
+  .filter-chips {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    background: var(--empty);
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    padding: 4px 9px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  .chip .dot { width: 7px; height: 7px; }
+  .chip.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
   }
   .patient-panel-list {
     overflow-y: auto;
@@ -312,6 +341,8 @@
     font-size: 13px;
     font-weight: 600;
     color: var(--ink);
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
   .patient-panel-item .room-tag {
     font-family: 'IBM Plex Mono', monospace;
@@ -320,18 +351,22 @@
     background: var(--empty);
     padding: 1px 6px;
     border-radius: 3px;
+    white-space: nowrap;
   }
   .patient-panel-item .age {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10.5px;
     color: var(--ink-soft);
+    white-space: nowrap;
   }
   .patient-panel-item .dx {
     font-size: 11px;
     color: var(--ink-soft);
     margin-top: 2px;
+    overflow-wrap: break-word;
+    word-break: break-word;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -346,19 +381,33 @@
     font-size: 12px;
     font-style: italic;
   }
+  .name-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .name-input-wrap .name-prefix {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    color: var(--ink-soft);
+    background: var(--empty);
+    border: 1px solid var(--border);
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    padding: 8px 8px 8px 10px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .name-input-wrap input {
+    border-radius: 0 6px 6px 0 !important;
+  }
   .room {
     position: absolute;
     background: var(--empty);
     border: 1.5px solid var(--empty-border);
-    border-radius: 3px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    border-radius: 5px;
     cursor: pointer;
     transition: transform 0.12s ease, box-shadow 0.12s ease;
-    padding: 4px;
-    text-align: center;
     overflow: hidden;
   }
   .room:hover {
@@ -366,34 +415,54 @@
     box-shadow: 0 6px 14px rgba(42,38,32,0.18);
     z-index: 5;
   }
-  .room .room-label {
+  .room .corner {
+    position: absolute;
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1;
+  }
+  .room .corner-tl {
+    top: 6px; left: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    max-width: calc(100% - 14px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .room .corner-bl {
+    bottom: 6px; left: 8px;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 10.5px;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.02em;
     color: var(--ink-soft);
-    white-space: nowrap;
   }
-  .room .room-info {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 12px;
+  .room .corner-tr {
+    top: 6px; right: 8px;
+    font-size: 11px;
     font-weight: 600;
-    color: var(--ink);
-    margin-top: 3px;
-    line-height: 1.2;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+  .room .corner-br {
+    bottom: 5px; right: 6px;
+    font-size: 16px;
   }
   .room.filled { border-width: 0; }
-  .room.filled .room-label { color: rgba(255,255,255,0.75); }
-  .room.filled .room-info { color: #fff; }
+  .room.filled .corner-tl { color: #fff; }
+  .room.filled .corner-bl { color: rgba(255,255,255,0.75); }
+  .room.filled .corner-tr { color: rgba(255,255,255,0.85); }
   .room.filled.dpjp-arief { background: var(--arief); }
   .room.filled.dpjp-benny { background: var(--benny); }
   .room.filled.dpjp-ripto { background: var(--ripto); }
   .room .baby-badge {
-    position: absolute;
-    top: 3px;
-    right: 4px;
-    font-size: 11px;
-    line-height: 1;
+    opacity: 1;
+    filter: none;
+  }
+  .room .baby-badge.baby-away {
+    opacity: 0.4;
+    filter: grayscale(1);
   }
   .room.recently-vacated {
     border-style: dashed;
@@ -408,10 +477,12 @@
   }
   .room .vacated-badge {
     position: absolute;
-    bottom: 3px;
-    right: 4px;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 9px;
     color: var(--accent);
+    white-space: nowrap;
   }
 
   .ruang-perawat {
@@ -660,6 +731,60 @@
   }
   .field-row .field { flex: 1; }
 
+  .djj-section, .ttv-section {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--border);
+  }
+  .djj-add-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 8px 0 10px;
+  }
+  .djj-value-input { width: 70px; flex: none; }
+  .djj-time-input { width: 100px; flex: none; }
+  .djj-unit {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .btn-small {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+  .djj-list {
+    max-height: 160px;
+    overflow-y: auto;
+  }
+  .djj-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .djj-item:last-child { border-bottom: none; }
+  .djj-item .djj-time {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    width: 60px;
+    flex: none;
+  }
+  .djj-item .djj-val {
+    font-weight: 600;
+    flex: 1;
+  }
+  .djj-item-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-size: 13px;
+    padding: 2px 4px;
+  }
+  .djj-item-actions button.del:hover { color: var(--ripto); }
   .history-list {
     margin-top: 6px;
     max-height: 160px;
@@ -739,12 +864,24 @@
     box-shadow: 0 4px 14px rgba(0,0,0,0.25);
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 980px) {
     .denah-body { flex-direction: column; }
+    .denah-scroll {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
     .patient-panel {
+      flex: none;
+      max-width: 100%;
+      min-width: 0;
+      width: 100%;
+      height: auto;
       border-left: none;
-      border-top: 1px solid var(--border);
-      max-height: 320px;
+      border-top: 2px solid var(--border);
+    }
+    .patient-panel-list {
+      max-height: 340px;
     }
   }
 
@@ -753,6 +890,7 @@
     header h1 { font-size: 21px; }
     .container { padding: 20px 12px 40px; }
     .denah-scroll { padding: 16px 10px; }
+    .patient-panel-list { max-height: 280px; }
   }
 
   /* ---------- Print ---------- */
@@ -848,6 +986,12 @@
           <h3>Pasien Aktif</h3>
           <span class="count" id="activeCount">0 pasien</span>
           <input type="text" id="patientSearch" class="patient-search" placeholder="Cari nama / kamar / DPJP..." oninput="renderActivePatientPanel()">
+          <div class="filter-chips" id="filterChips">
+            <button type="button" class="chip active" data-dpjp="" onclick="setDpjpFilter('')">Semua</button>
+            <button type="button" class="chip" data-dpjp="arief" onclick="setDpjpFilter('arief')"><span class="dot" style="background:var(--arief)"></span>Arief</button>
+            <button type="button" class="chip" data-dpjp="benny" onclick="setDpjpFilter('benny')"><span class="dot" style="background:var(--benny)"></span>Benny</button>
+            <button type="button" class="chip" data-dpjp="ripto" onclick="setDpjpFilter('ripto')"><span class="dot" style="background:var(--ripto)"></span>Ripto</button>
+          </div>
         </div>
         <div class="patient-panel-list" id="activePatientList"></div>
       </div>
@@ -881,7 +1025,10 @@
       </div>
       <div class="field">
         <label>Nama Pasien</label>
-        <input type="text" id="f_nama" placeholder="Ny. ...">
+        <div class="name-input-wrap">
+          <span class="name-prefix">Ny</span>
+          <input type="text" id="f_nama" placeholder="Siti Aminah">
+        </div>
       </div>
       <div class="field">
         <label>Umur</label>
@@ -901,12 +1048,55 @@
         <textarea id="f_note" placeholder="Catatan tambahan (opsional)"></textarea>
       </div>
 
+      <div class="djj-section">
+        <label class="history-label-row">
+          <span>💓 DJJ (Denyut Jantung Janin)</span>
+        </label>
+        <div class="djj-add-row">
+          <input type="number" id="f_djj_new_value" placeholder="cth. 140" class="djj-value-input">
+          <span class="djj-unit">bpm</span>
+          <input type="time" id="f_djj_new_time" class="djj-time-input">
+          <button type="button" class="btn btn-small" onclick="addDjjEntry()">+ Tambah</button>
+        </div>
+        <div class="djj-list" id="djjList"></div>
+      </div>
+
+      <div class="ttv-section">
+        <label class="history-label-row">
+          <span>🩺 Tanda Vital Terakhir (TTV)</span>
+        </label>
+        <div class="field-row">
+          <div class="field">
+            <label>Tekanan Darah</label>
+            <input type="text" id="f_ttv_td" placeholder="120/80 mmHg">
+          </div>
+          <div class="field">
+            <label>Nadi</label>
+            <input type="text" id="f_ttv_nadi" placeholder="88 x/mnt">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Suhu</label>
+            <input type="text" id="f_ttv_suhu" placeholder="36.5 °C">
+          </div>
+          <div class="field">
+            <label>RR</label>
+            <input type="text" id="f_ttv_rr" placeholder="20 x/mnt">
+          </div>
+        </div>
+      </div>
+
       <div class="baby-section">
         <label class="baby-toggle-label">
           <input type="checkbox" id="f_baby_toggle" onchange="toggleBabyFields()">
           <span>💕 Bayi sudah lahir</span>
         </label>
         <div id="babyFields" class="baby-fields" style="display:none;">
+          <label class="baby-toggle-label">
+            <input type="checkbox" id="f_baby_inroom" checked>
+            <span>Bayi saat ini di kamar yang sama (rawat gabung)</span>
+          </label>
           <div class="field">
             <label>Nama Bayi</label>
             <input type="text" id="f_baby_nama" placeholder="By. Ny. ...">
@@ -978,26 +1168,26 @@ const DPJP = {
 const DPJP_COLOR_VAR = { arief: '--arief', benny: '--benny', ripto: '--ripto' };
 
 const ROOM_LAYOUT = {
-  '3B1': { x: 278, y: 16,  w: 62, h: 66 },
-  '3B2': { x: 344, y: 16,  w: 62, h: 66 },
-  '3A3': { x: 96,  y: 66,  w: 56, h: 60 },
-  '3A2': { x: 154, y: 66,  w: 56, h: 60 },
-  '3A1': { x: 212, y: 66,  w: 56, h: 60 },
-  '3C1': { x: 278, y: 128, w: 62, h: 60 },
-  '3C2': { x: 344, y: 128, w: 62, h: 60 },
-  '2A2': { x: 96,  y: 128, w: 84, h: 64 },
-  '2A1': { x: 180, y: 128, w: 88, h: 64 },
-  '1B2': { x: 96,  y: 198, w: 84, h: 64 },
-  '1B1': { x: 180, y: 198, w: 88, h: 64 },
-  '1A2': { x: 96,  y: 268, w: 84, h: 64 },
-  '1A1': { x: 180, y: 268, w: 88, h: 64 },
-  'VK ISO': { x: 96,  y: 338, w: 84, h: 64 },
-  'VK4': { x: 96,  y: 410, w: 84, h: 76 },
-  'VK3': { x: 180, y: 410, w: 84, h: 76 },
-  'VK2': { x: 264, y: 410, w: 84, h: 76 },
-  'VK1': { x: 348, y: 410, w: 84, h: 76 },
+  '3B1': { x: 396, y: 22,  w: 92,  h: 98 },
+  '3B2': { x: 494, y: 22,  w: 92,  h: 98 },
+  '3A3': { x: 138, y: 98,  w: 82,  h: 88 },
+  '3A2': { x: 224, y: 98,  w: 82,  h: 88 },
+  '3A1': { x: 310, y: 98,  w: 82,  h: 88 },
+  '3C1': { x: 396, y: 188, w: 92,  h: 88 },
+  '3C2': { x: 494, y: 188, w: 92,  h: 88 },
+  '2A2': { x: 138, y: 188, w: 122, h: 94 },
+  '2A1': { x: 264, y: 188, w: 128, h: 94 },
+  '1B2': { x: 138, y: 288, w: 122, h: 94 },
+  '1B1': { x: 264, y: 288, w: 128, h: 94 },
+  '1A2': { x: 138, y: 388, w: 122, h: 94 },
+  '1A1': { x: 264, y: 388, w: 128, h: 94 },
+  'VK ISO': { x: 138, y: 488, w: 122, h: 94 },
+  'VK4': { x: 138, y: 588, w: 122, h: 110 },
+  'VK3': { x: 264, y: 588, w: 122, h: 110 },
+  'VK2': { x: 390, y: 588, w: 122, h: 110 },
+  'VK1': { x: 516, y: 588, w: 122, h: 110 },
 };
-const RUANG_PERAWAT = { x: 278, y: 198, w: 134, h: 204 };
+const RUANG_PERAWAT = { x: 396, y: 288, w: 194, h: 296 };
 
 const ALL_ROOM_IDS = Object.keys(ROOM_LAYOUT);
 const OTHER_SECTIONS = [
@@ -1046,6 +1236,21 @@ function initials(name) {
   return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,3);
 }
 
+// Nama pasien disimpan TANPA prefix "Ny" (murni nama lengkap).
+// "Ny" ditambahkan secara dinamis saat ditampilkan di panel/print.
+function firstName(name) {
+  if (!name) return '';
+  return name.trim().split(/\s+/)[0];
+}
+function displayNyName(name) {
+  if (!name) return '';
+  return 'Ny ' + name.trim();
+}
+function lastDjjEntry(djjHistory) {
+  if (!djjHistory || djjHistory.length === 0) return null;
+  return djjHistory[djjHistory.length - 1];
+}
+
 function renderDenah() {
   const denah = document.getElementById('denah');
   denah.innerHTML = '';
@@ -1070,21 +1275,32 @@ function renderDenah() {
     div.style.height = pos.h + 'px';
     div.onclick = () => openRoomModal(id);
 
-    const label = document.createElement('div');
-    label.className = 'room-label';
-    label.textContent = id;
-    div.appendChild(label);
+    // Kiri bawah: nomor kamar (selalu tampil)
+    const cornerBl = document.createElement('div');
+    cornerBl.className = 'corner corner-bl';
+    cornerBl.textContent = id;
+    div.appendChild(cornerBl);
 
     if (room && room.dpjp) {
       div.classList.add('filled', DPJP[room.dpjp].cls);
-      const info = document.createElement('div');
-      info.className = 'room-info';
-      info.textContent = (room.nama ? initials(room.nama) : '') + (room.umur ? ' / ' + room.umur : '');
-      div.appendChild(info);
 
+      // Kiri atas: nama depan pasien (tanpa "Ny")
+      const cornerTl = document.createElement('div');
+      cornerTl.className = 'corner corner-tl';
+      cornerTl.textContent = room.nama ? firstName(room.nama) : '(kosong)';
+      div.appendChild(cornerTl);
+
+      // Kanan atas: DJJ terakhir
+      const lastDjj = lastDjjEntry(room.djjHistory);
+      const cornerTr = document.createElement('div');
+      cornerTr.className = 'corner corner-tr';
+      cornerTr.textContent = lastDjj ? `DJJ ${lastDjj.value}` : '';
+      div.appendChild(cornerTr);
+
+      // Kanan bawah: badge bayi — solid jika bayi lahir & ada di kamar, outline jika lahir tapi tidak di kamar
       if (room.baby && room.baby.exists) {
         const badge = document.createElement('div');
-        badge.className = 'baby-badge';
+        badge.className = 'corner corner-br baby-badge' + (room.baby.inRoom === false ? ' baby-away' : '');
         badge.textContent = '💕';
         div.appendChild(badge);
       }
@@ -1104,6 +1320,16 @@ function renderDenah() {
   });
 }
 
+let activeDpjpFilter = '';
+
+function setDpjpFilter(dpjp) {
+  activeDpjpFilter = dpjp;
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.toggle('active', c.getAttribute('data-dpjp') === dpjp);
+  });
+  renderActivePatientPanel();
+}
+
 function renderActivePatientPanel() {
   const listEl = document.getElementById('activePatientList');
   const countEl = document.getElementById('activeCount');
@@ -1115,6 +1341,10 @@ function renderActivePatientPanel() {
     const r = DATA.rooms[id];
     if (r && r.dpjp) active.push({ room: id, ...r });
   });
+
+  if (activeDpjpFilter) {
+    active = active.filter(p => p.dpjp === activeDpjpFilter);
+  }
 
   if (query) {
     active = active.filter(p => {
@@ -1129,8 +1359,8 @@ function renderActivePatientPanel() {
   countEl.textContent = active.length + ' pasien';
 
   if (active.length === 0) {
-    listEl.innerHTML = query
-      ? '<div class="patient-panel-empty">Tidak ada pasien yang cocok dengan pencarian</div>'
+    listEl.innerHTML = (query || activeDpjpFilter)
+      ? '<div class="patient-panel-empty">Tidak ada pasien yang cocok dengan filter/pencarian</div>'
       : '<div class="patient-panel-empty">Belum ada pasien aktif di Matahari</div>';
     return;
   }
@@ -1151,7 +1381,7 @@ function renderActivePatientPanel() {
     const row1 = document.createElement('div');
     row1.className = 'row1';
     const hday = calcHDay(p.tglMasuk);
-    row1.innerHTML = `<span class="name">${p.nama || '(tanpa nama)'}</span><span class="room-tag">${p.room}</span>${p.umur ? `<span class="age">${p.umur}</span>` : ''}${hday !== null ? `<span class="age">H${hday}</span>` : ''}`;
+    row1.innerHTML = `<span class="name">${p.nama ? displayNyName(p.nama) : '(tanpa nama)'}</span><span class="room-tag">${p.room}</span>${p.umur ? `<span class="age">${p.umur}</span>` : ''}${hday !== null ? `<span class="age">H${hday}</span>` : ''}`;
     info.appendChild(row1);
 
     if (p.dx) {
@@ -1201,7 +1431,7 @@ function renderOtherSections() {
         row.appendChild(dot);
         const name = document.createElement('span');
         name.className = 'name';
-        name.textContent = p.nama || '(tanpa nama)';
+        name.textContent = p.nama ? displayNyName(p.nama) : '(tanpa nama)';
         row.appendChild(name);
         const age = document.createElement('span');
         age.className = 'age';
@@ -1236,11 +1466,16 @@ function renderSummary() {
     });
   });
 
+  const bedTotal = ALL_ROOM_IDS.length;
+  const bedFilled = ALL_ROOM_IDS.filter(id => DATA.rooms[id] && DATA.rooms[id].dpjp).length;
+  const bedEmpty = bedTotal - bedFilled;
+
   bar.innerHTML = `
     <div class="summary-item total">${total} pasien</div>
     <div class="summary-item"><span class="dot" style="background:var(--arief)"></span>${counts.arief}</div>
     <div class="summary-item"><span class="dot" style="background:var(--benny)"></span>${counts.benny}</div>
     <div class="summary-item"><span class="dot" style="background:var(--ripto)"></span>${counts.ripto}</div>
+    <div class="summary-item">🛏 ${bedFilled}/${bedTotal} terisi · ${bedEmpty} kosong</div>
   `;
 }
 
@@ -1261,7 +1496,7 @@ function renderPrintView() {
       const babyStr = (r.baby && r.baby.exists) ? (r.baby.nama || 'Ya') : '-';
       html += `<tr>
         <td>${id}</td>
-        <td>${r.nama || '-'} / ${r.umur || '-'}</td>
+        <td>${r.nama ? displayNyName(r.nama) : '-'} / ${r.umur || '-'}</td>
         <td>${hday !== null ? 'H'+hday : '-'}</td>
         <td>${r.dx || '-'}</td>
         <td>${DPJP[r.dpjp] ? DPJP[r.dpjp].name : '-'}</td>
@@ -1281,7 +1516,7 @@ function renderPrintView() {
     list.forEach(p => {
       const hday = calcHDay(p.tglMasuk);
       html += `<tr>
-        <td>${p.nama || '-'} / ${p.umur || '-'}</td>
+        <td>${p.nama ? displayNyName(p.nama) : '-'} / ${p.umur || '-'}</td>
         <td>${hday !== null ? 'H'+hday : '-'}</td>
         <td>${p.dx || '-'}</td>
         <td>${DPJP[p.dpjp] ? DPJP[p.dpjp].name : '-'}</td>
@@ -1313,8 +1548,10 @@ function openRoomModal(roomId) {
   document.getElementById('f_dx').value = room.dx || '';
   document.getElementById('f_note').value = room.note || '';
   populateBabyFields(room.baby);
+  populateTtvFields(room.ttv);
   renderHdayBadge(room.tglMasuk);
   renderHistory(room.history || []);
+  renderDjjList(room.djjHistory || []);
   document.getElementById('modalOverlay').classList.add('active');
 }
 
@@ -1344,6 +1581,7 @@ function populateBabyFields(baby) {
   const has = !!(baby && baby.exists);
   document.getElementById('f_baby_toggle').checked = has;
   document.getElementById('babyFields').style.display = has ? 'block' : 'none';
+  document.getElementById('f_baby_inroom').checked = baby ? (baby.inRoom !== false) : true;
   document.getElementById('f_baby_nama').value = (baby && baby.nama) || '';
   document.getElementById('f_baby_jk').value = (baby && baby.jk) || '';
   document.getElementById('f_baby_waktu').value = (baby && baby.waktu) || '';
@@ -1358,6 +1596,7 @@ function readBabyFields() {
   const exists = document.getElementById('f_baby_toggle').checked;
   return {
     exists,
+    inRoom: document.getElementById('f_baby_inroom').checked,
     nama: document.getElementById('f_baby_nama').value.trim(),
     jk: document.getElementById('f_baby_jk').value,
     waktu: document.getElementById('f_baby_waktu').value.trim(),
@@ -1367,6 +1606,96 @@ function readBabyFields() {
     cara: document.getElementById('f_baby_cara').value.trim(),
     note: document.getElementById('f_baby_note').value.trim(),
   };
+}
+
+function readTtvFields() {
+  return {
+    td: document.getElementById('f_ttv_td').value.trim(),
+    nadi: document.getElementById('f_ttv_nadi').value.trim(),
+    suhu: document.getElementById('f_ttv_suhu').value.trim(),
+    rr: document.getElementById('f_ttv_rr').value.trim(),
+  };
+}
+
+function populateTtvFields(ttv) {
+  document.getElementById('f_ttv_td').value = (ttv && ttv.td) || '';
+  document.getElementById('f_ttv_nadi').value = (ttv && ttv.nadi) || '';
+  document.getElementById('f_ttv_suhu').value = (ttv && ttv.suhu) || '';
+  document.getElementById('f_ttv_rr').value = (ttv && ttv.rr) || '';
+}
+
+// ---------- DJJ (Denyut Jantung Janin) ----------
+function getCurrentDjjArray() {
+  if (!currentEditKey) return null;
+  if (currentEditKey.type === 'room') {
+    const r = DATA.rooms[currentEditKey.id];
+    return r ? (r.djjHistory || (r.djjHistory = [])) : null;
+  } else if (currentEditKey.type === 'section') {
+    const { section, idx } = currentEditKey;
+    if (idx === null) return null; // pasien belum disimpan
+    const p = (DATA.otherPatients[section] || [])[idx];
+    return p ? (p.djjHistory || (p.djjHistory = [])) : null;
+  }
+  return null;
+}
+
+function renderDjjList(djjHistory) {
+  const list = document.getElementById('djjList');
+  if (!djjHistory || djjHistory.length === 0) {
+    list.innerHTML = '<div class="empty-note">Belum ada data DJJ</div>';
+    return;
+  }
+  const indexed = djjHistory.map((d, i) => ({ d, i }));
+  // tampilkan terbaru dulu
+  list.innerHTML = indexed.slice().reverse().map(({ d, i }) => {
+    return `<div class="djj-item" data-idx="${i}">
+      <input type="time" class="djj-time" value="${d.time || ''}" onchange="editDjjTime(${i}, this.value)">
+      <span class="djj-val">${d.value} bpm</span>
+      <span class="djj-item-actions">
+        <button type="button" class="del" onclick="deleteDjjEntry(${i})" title="Hapus">🗑</button>
+      </span>
+    </div>`;
+  }).join('');
+}
+
+function addDjjEntry() {
+  const valueEl = document.getElementById('f_djj_new_value');
+  const timeEl = document.getElementById('f_djj_new_time');
+  const value = valueEl.value.trim();
+  if (!value) { showToast('Isi nilai DJJ dulu'); return; }
+  let time = timeEl.value;
+  if (!time) {
+    const now = new Date();
+    time = now.toTimeString().slice(0,5);
+  }
+  const djjArr = getCurrentDjjArray();
+  if (!djjArr) { showToast('Simpan pasien dulu sebelum tambah DJJ'); return; }
+  djjArr.push({ value, time });
+  saveData();
+  renderDjjList(djjArr);
+  renderDenah();
+  valueEl.value = '';
+  timeEl.value = '';
+  showToast('DJJ ditambahkan');
+}
+
+function editDjjTime(idx, newTime) {
+  const djjArr = getCurrentDjjArray();
+  if (!djjArr || !djjArr[idx]) return;
+  djjArr[idx].time = newTime;
+  saveData();
+  renderDenah();
+}
+
+function deleteDjjEntry(idx) {
+  const djjArr = getCurrentDjjArray();
+  if (!djjArr || !djjArr[idx]) return;
+  if (!confirm('Hapus entri DJJ ini?')) return;
+  djjArr.splice(idx, 1);
+  saveData();
+  renderDjjList(djjArr);
+  renderDenah();
+  showToast('Entri DJJ dihapus');
 }
 
 function openSectionPatientModal(section, idx) {
@@ -1381,8 +1710,10 @@ function openSectionPatientModal(section, idx) {
   document.getElementById('f_dx').value = patient.dx || '';
   document.getElementById('f_note').value = patient.note || '';
   populateBabyFields(patient.baby);
+  populateTtvFields(patient.ttv);
   renderHdayBadge(patient.tglMasuk);
   renderHistory(patient.history || []);
+  renderDjjList(patient.djjHistory || []);
   document.getElementById('modalOverlay').classList.add('active');
 }
 
@@ -1508,15 +1839,17 @@ function saveRoom() {
   const dx = document.getElementById('f_dx').value.trim();
   const note = document.getElementById('f_note').value.trim();
   const baby = readBabyFields();
+  const ttv = readTtvFields();
 
   if (!currentEditKey) return;
 
   if (currentEditKey.type === 'room') {
     const roomId = currentEditKey.id;
-    const existing = DATA.rooms[roomId] || { history: [] };
+    const existing = DATA.rooms[roomId] || { history: [], djjHistory: [] };
     const wasEmpty = !existing.dpjp;
     const nowEmpty = !dpjp;
     let history = existing.history || [];
+    let djjHistory = existing.djjHistory || [];
 
     if (wasEmpty && !nowEmpty) {
       if (!tglMasuk) tglMasuk = new Date().toISOString().slice(0,10);
@@ -1528,23 +1861,25 @@ function saveRoom() {
       addHistoryEntry(history, 'Bayi lahir', `${baby.nama || '-'}`);
     }
 
-    DATA.rooms[roomId] = { dpjp, nama, umur, tglMasuk, dx, note, baby, history };
+    DATA.rooms[roomId] = { dpjp, nama, umur, tglMasuk, dx, note, baby, ttv, history, djjHistory };
   } else if (currentEditKey.type === 'section') {
     const { section, idx } = currentEditKey;
     const list = DATA.otherPatients[section] || [];
     if (idx !== null) {
       const existing = list[idx];
       let history = existing.history || [];
+      let djjHistory = existing.djjHistory || [];
       addHistoryEntry(history, 'Data diperbarui', `${nama || '-'}`);
       if (baby.exists && (!existing.baby || !existing.baby.exists)) {
         addHistoryEntry(history, 'Bayi lahir', `${baby.nama || '-'}`);
       }
-      list[idx] = { dpjp, nama, umur, tglMasuk, dx, note, baby, history };
+      list[idx] = { dpjp, nama, umur, tglMasuk, dx, note, baby, ttv, history, djjHistory };
     } else {
       if (!tglMasuk) tglMasuk = new Date().toISOString().slice(0,10);
       let history = [];
+      let djjHistory = [];
       addHistoryEntry(history, 'Pasien ditambahkan', `${nama || '-'}`);
-      list.push({ dpjp, nama, umur, tglMasuk, dx, note, baby, history });
+      list.push({ dpjp, nama, umur, tglMasuk, dx, note, baby, ttv, history, djjHistory });
     }
     DATA.otherPatients[section] = list;
   }
@@ -1564,7 +1899,7 @@ function clearRoom() {
     if (existing && existing.dpjp) {
       let history = existing.history || [];
       addHistoryEntry(history, 'Pasien keluar / kamar dikosongkan', existing.nama || '-');
-      DATA.rooms[roomId] = { dpjp: '', nama: '', umur: '', tglMasuk: '', dx: '', note: '', baby: null, history };
+      DATA.rooms[roomId] = { dpjp: '', nama: '', umur: '', tglMasuk: '', dx: '', note: '', baby: null, ttv: null, history, djjHistory: [] };
     }
   } else if (currentEditKey.type === 'section') {
     const { section, idx } = currentEditKey;
@@ -1601,8 +1936,10 @@ function copyRingkasan() {
       total++;
       const hday = calcHDay(r.tglMasuk);
       const hstr = hday !== null ? ` (H${hday})` : '';
-      const babyStr = (r.baby && r.baby.exists) ? ' 💕 bayi lahir' : '';
-      lines.push(`${id} - ${r.nama || '-'}/${r.umur || '-'}${hstr}/${r.dx || '-'}/${DPJP[r.dpjp] ? DPJP[r.dpjp].name : '-'}${babyStr}`);
+      const babyStr = (r.baby && r.baby.exists) ? (r.baby.inRoom === false ? ' 💕 bayi lahir (di ruang bayi)' : ' 💕 bayi lahir (rawat gabung)') : '';
+      const lastDjj = lastDjjEntry(r.djjHistory);
+      const djjStr = lastDjj ? ` / DJJ ${lastDjj.value} (${lastDjj.time})` : '';
+      lines.push(`${id} - ${r.nama ? displayNyName(r.nama) : '-'}/${r.umur || '-'}${hstr}/${r.dx || '-'}/${DPJP[r.dpjp] ? DPJP[r.dpjp].name : '-'}${babyStr}${djjStr}`);
     }
   });
 
@@ -1618,7 +1955,7 @@ function copyRingkasan() {
       list.forEach((p, i) => {
         const hday = calcHDay(p.tglMasuk);
         const hstr = hday !== null ? ` (H${hday})` : '';
-        otherLines.push(`${i+1}. ${p.nama || '-'}/${p.umur || '-'}${hstr}/${p.dx || '-'}/${DPJP[p.dpjp] ? DPJP[p.dpjp].name : '-'}`);
+        otherLines.push(`${i+1}. ${p.nama ? displayNyName(p.nama) : '-'}/${p.umur || '-'}${hstr}/${p.dx || '-'}/${DPJP[p.dpjp] ? DPJP[p.dpjp].name : '-'}`);
       });
     }
   });
